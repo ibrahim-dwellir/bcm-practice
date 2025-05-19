@@ -21,7 +21,8 @@ func createBlockHeightTable(conn driver.Conn) {
 		CREATE TABLE IF NOT EXISTS block_heights (
 			name String,
 			height UInt64,
-			timestamp DateTime64(3, 'UTC')
+			timestamp DateTime64(3, 'UTC'),
+			latency_ms UInt64
 		) ENGINE = MergeTree()
 		PARTITION BY toYYYYMM(timestamp)
 		ORDER BY timestamp

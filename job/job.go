@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"time"
 
 	"dwellir.com/bcm/logger"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
@@ -26,7 +27,10 @@ func New(conn driver.Conn, name string, endpoint string) {
 		return
 	}
 
+	start := time.Now()
 	resp, err := http.Post(endpoint, "application/json", bytes.NewBuffer(jsonData))
+	latency := time.Since(start)
+
 	if err != nil {
 		log.Fatalf("Failed to send request: %v", err)
 		return
@@ -60,9 +64,9 @@ func New(conn driver.Conn, name string, endpoint string) {
 
 	// Insert the block height into the database
 	err = conn.Exec(context.Background(), `
-			INSERT INTO block_heights (name, height, timestamp)
-			VALUES (?, ?, now())
-		`, name, blockHeight)
+			INSERT INTO block_heights (name, height, timestamp, latency_ms)
+			VALUES (?, ?, now(), ?)
+		`, name, blockHeight, latency.Milliseconds())
 
 	if err != nil {
 		log.Fatalf("Failed to insert data: %v", err)
