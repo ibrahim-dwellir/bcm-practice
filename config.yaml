@@ -1,0 +1,7 @@
+interval: 2
+jobs:
+  - name: ethereum-sepolia
+    endpoint: https://api-ethereum-sepolia.n.dwellir.com/b8ab6aae-5192-40da-b086-8f812f01cff5
+  - name: arbitrum-sepolia
+    endpoint: https://api-arbitrum-sepolia.n.dwellir.com/b8ab6aae-5192-40da-b086-8f812f01cff5
+    interval: 5
